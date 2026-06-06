@@ -28,18 +28,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         menu.autoenablesItems = false
 
+        // 앱 이름 + 버전 (Info.plist 기준, 개발 실행 시 fallback)
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let titleItem = NSMenuItem(title: "FocusPlay \(version)", action: nil, keyEquivalent: "")
+        titleItem.isEnabled = false
+        menu.addItem(titleItem)
+        menu.addItem(.separator())
+
         // 모드 선택
-        let autoItem = NSMenuItem(title: "자동 (전체화면 감지)", action: #selector(selectAuto), keyEquivalent: "")
+        let autoItem = NSMenuItem(title: L("menu.auto"), action: #selector(selectAuto), keyEquivalent: "")
         autoItem.target = self
         autoItem.state = controller.mode == .auto ? .on : .off
         menu.addItem(autoItem)
 
-        let manualItem = NSMenuItem(title: "수동 토글", action: #selector(toggleManual), keyEquivalent: "d")
+        let manualItem = NSMenuItem(title: L("menu.manual"), action: #selector(toggleManual), keyEquivalent: "d")
         manualItem.target = self
         manualItem.state = (controller.mode == .manual && controller.isEngaged) ? .on : .off
         menu.addItem(manualItem)
 
-        let offItem = NSMenuItem(title: "끄기", action: #selector(selectOff), keyEquivalent: "")
+        let offItem = NSMenuItem(title: L("menu.off"), action: #selector(selectOff), keyEquivalent: "")
         offItem.target = self
         offItem.state = controller.mode == .off ? .on : .off
         menu.addItem(offItem)
@@ -47,7 +54,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(.separator())
 
         // 어둠 강도
-        let dimHeader = NSMenuItem(title: "어둠 강도", action: nil, keyEquivalent: "")
+        let dimHeader = NSMenuItem(title: L("menu.dim_strength"), action: nil, keyEquivalent: "")
         dimHeader.isEnabled = false
         menu.addItem(dimHeader)
 
@@ -61,7 +68,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         menu.addItem(.separator())
 
-        let quitItem = NSMenuItem(title: "종료", action: #selector(quit), keyEquivalent: "q")
+        let pauseItem = NSMenuItem(title: L("menu.brighten_when_paused"), action: #selector(toggleBrightenWhenPaused), keyEquivalent: "")
+        pauseItem.target = self
+        pauseItem.state = controller.brightenWhenPaused ? .on : .off
+        menu.addItem(pauseItem)
+
+        menu.addItem(.separator())
+
+        // 저작권 (Info.plist NSHumanReadableCopyright 기준)
+        let copyright = Bundle.main.infoDictionary?["NSHumanReadableCopyright"] as? String ?? "© TypoStudio"
+        let copyrightItem = NSMenuItem(title: copyright, action: nil, keyEquivalent: "")
+        copyrightItem.isEnabled = false
+        menu.addItem(copyrightItem)
+
+        let quitItem = NSMenuItem(title: L("menu.quit"), action: #selector(quit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
 
@@ -87,6 +107,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func setDim(_ sender: NSMenuItem) {
         controller.setDimStrength(CGFloat(sender.tag) / 100.0)
+        rebuildMenu()
+    }
+
+    @objc private func toggleBrightenWhenPaused() {
+        controller.brightenWhenPaused.toggle()
         rebuildMenu()
     }
 

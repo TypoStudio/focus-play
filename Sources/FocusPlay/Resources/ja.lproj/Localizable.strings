@@ -1,0 +1,6 @@
+"menu.auto" = "自動（フルスクリーン検出）";
+"menu.manual" = "手動切り替え";
+"menu.off" = "オフ";
+"menu.dim_strength" = "暗さの強さ";
+"menu.brighten_when_paused" = "再生停止時に明るくする";
+"menu.quit" = "終了";

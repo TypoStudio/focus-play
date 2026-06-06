@@ -1,0 +1,6 @@
+"menu.auto" = "自动（检测全屏）";
+"menu.manual" = "手动切换";
+"menu.off" = "关闭";
+"menu.dim_strength" = "变暗强度";
+"menu.brighten_when_paused" = "暂停播放时变亮";
+"menu.quit" = "退出";

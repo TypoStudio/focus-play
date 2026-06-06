@@ -1,0 +1,65 @@
+<svg width="1280" height="400" viewBox="0 0 1280 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="400" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0a0e1a"/>
+      <stop offset="1" stop-color="#161b30"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#a9b4d6"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#7c8cf8"/>
+      <stop offset="1" stop-color="#a66bf0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop stop-color="#7c8cf8" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#7c8cf8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="400" rx="24" fill="url(#bg)"/>
+  <ellipse cx="980" cy="200" rx="360" ry="300" fill="url(#glow)"/>
+
+  <!-- 3 monitors: center bright (playing), sides dimmed -->
+  <g transform="translate(720,96)">
+    <!-- left monitor (dimmed) -->
+    <g transform="translate(0,40)" opacity="0.85">
+      <rect x="0" y="0" width="150" height="96" rx="8" fill="#0d1124" stroke="#262c44" stroke-width="2"/>
+      <rect x="10" y="10" width="130" height="76" rx="4" fill="#05070f"/>
+      <rect x="62" y="138" width="26" height="14" fill="#1b2138"/>
+      <rect x="44" y="150" width="62" height="6" rx="3" fill="#1b2138"/>
+    </g>
+    <!-- center monitor (bright, playing) -->
+    <g transform="translate(168,0)">
+      <rect x="0" y="0" width="184" height="116" rx="9" fill="#0d1124" stroke="url(#accent)" stroke-width="2.5"/>
+      <rect x="11" y="11" width="162" height="94" rx="5" fill="#1d2748"/>
+      <circle cx="92" cy="58" r="26" fill="#7c8cf8" opacity="0.18"/>
+      <path d="M84 47 L106 58 L84 69 Z" fill="url(#accent)"/>
+      <rect x="78" y="160" width="30" height="16" fill="#222a44"/>
+      <rect x="56" y="176" width="74" height="7" rx="3.5" fill="#222a44"/>
+    </g>
+    <!-- right monitor (dimmed) -->
+    <g transform="translate(370,40)" opacity="0.85">
+      <rect x="0" y="0" width="150" height="96" rx="8" fill="#0d1124" stroke="#262c44" stroke-width="2"/>
+      <rect x="10" y="10" width="130" height="76" rx="4" fill="#05070f"/>
+      <rect x="62" y="138" width="26" height="14" fill="#1b2138"/>
+      <rect x="44" y="150" width="62" height="6" rx="3" fill="#1b2138"/>
+    </g>
+  </g>
+
+  <!-- moon.stars glyph -->
+  <g transform="translate(96,120)">
+    <path d="M70 6 a64 64 0 1 0 0 128 a50 50 0 0 1 0 -128 Z" fill="url(#accent)"/>
+    <circle cx="118" cy="20" r="6" fill="#ffd76b"/>
+    <circle cx="138" cy="52" r="4" fill="#ffd76b"/>
+    <circle cx="112" cy="58" r="3" fill="#ffe8a8"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="96" y="300" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', Helvetica, Arial, sans-serif" font-size="82" font-weight="800" fill="url(#title)" letter-spacing="-2">FocusPlay</text>
+  <text x="100" y="346" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', Helvetica, Arial, sans-serif" font-size="26" font-weight="500" fill="#8e99c0">전체화면 영상을 재생하면, 나머지 모니터는 알아서 어두워집니다</text>
+</svg>

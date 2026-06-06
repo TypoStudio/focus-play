@@ -1,0 +1,6 @@
+"menu.auto" = "Automático (detectar pantalla completa)";
+"menu.manual" = "Alternar manualmente";
+"menu.off" = "Desactivar";
+"menu.dim_strength" = "Intensidad de atenuación";
+"menu.brighten_when_paused" = "Aclarar al pausar la reproducción";
+"menu.quit" = "Salir";
