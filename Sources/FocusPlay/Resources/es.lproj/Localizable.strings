@@ -4,3 +4,4 @@
 "menu.dim_strength" = "Intensidad de atenuación";
 "menu.brighten_when_paused" = "Aclarar al pausar la reproducción";
 "menu.quit" = "Salir";
+"menu.launch_at_login" = "Iniciar al iniciar sesión";

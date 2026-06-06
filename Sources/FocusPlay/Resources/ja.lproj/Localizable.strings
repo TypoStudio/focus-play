@@ -4,3 +4,4 @@
 "menu.dim_strength" = "暗さの強さ";
 "menu.brighten_when_paused" = "再生停止時に明るくする";
 "menu.quit" = "終了";
+"menu.launch_at_login" = "ログイン時に起動";

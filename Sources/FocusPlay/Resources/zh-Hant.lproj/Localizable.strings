@@ -4,3 +4,4 @@
 "menu.dim_strength" = "變暗強度";
 "menu.brighten_when_paused" = "暫停播放時變亮";
 "menu.quit" = "結束";
+"menu.launch_at_login" = "登入時啟動";

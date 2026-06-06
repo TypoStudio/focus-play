@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/menu%20bar%20app-7c8cf8?style=flat-square" alt="menu bar app">
   <img src="https://img.shields.io/badge/SwiftPM-build-brightgreen?style=flat-square&logo=swift&logoColor=white" alt="SwiftPM">
   <img src="https://img.shields.io/badge/permissions-none-success?style=flat-square" alt="no permissions">
+  <a href="https://github.com/TypoStudio/focus-play/releases/latest"><img src="https://img.shields.io/github/v/release/TypoStudio/focus-play?style=flat-square&logo=apple&logoColor=white&label=download&color=7c8cf8" alt="download"></a>
 </p>
 
 # FocusPlay
@@ -34,6 +35,10 @@
 - 🌐 **다국어 지원** — 한국어·영어·일본어·중국어(간체/번체)·스페인어·힌디어.
 
 ## 설치 및 실행
+
+### 다운로드 (권장)
+
+[**최신 릴리즈**](https://github.com/TypoStudio/focus-play/releases/latest)에서 `FocusPlay-x.y.z.zip` 을 받아 압축을 풀고, `FocusPlay.app` 을 **응용 프로그램** 폴더로 옮기세요. 첫 실행 시 우클릭 → **열기** (서명되지 않은 앱).
 
 ### 빠른 실행 (개발)
 

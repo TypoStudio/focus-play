@@ -1,4 +1,5 @@
 import AppKit
+import ServiceManagement
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -73,6 +74,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         pauseItem.state = controller.brightenWhenPaused ? .on : .off
         menu.addItem(pauseItem)
 
+        let loginItem = NSMenuItem(title: L("menu.launch_at_login"), action: #selector(toggleLaunchAtLogin), keyEquivalent: "")
+        loginItem.target = self
+        loginItem.state = (SMAppService.mainApp.status == .enabled) ? .on : .off
+        menu.addItem(loginItem)
+
         menu.addItem(.separator())
 
         // 저작권 (Info.plist NSHumanReadableCopyright 기준)
@@ -112,6 +118,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func toggleBrightenWhenPaused() {
         controller.brightenWhenPaused.toggle()
+        rebuildMenu()
+    }
+
+    @objc private func toggleLaunchAtLogin() {
+        do {
+            if SMAppService.mainApp.status == .enabled {
+                try SMAppService.mainApp.unregister()
+            } else {
+                try SMAppService.mainApp.register()
+            }
+        } catch {
+            NSLog("FocusPlay: 로그인 항목 등록 실패 - \(error.localizedDescription)")
+        }
         rebuildMenu()
     }
 

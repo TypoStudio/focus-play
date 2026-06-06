@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 APP="build/FocusPlay.app"
-VERSION="${1:-1.0.0}"
+VERSION="${1:-1.0.1}"
 
 echo "▶ release 빌드..."
 swift build -c release

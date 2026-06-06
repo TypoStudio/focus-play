@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/menu%20bar%20app-7c8cf8?style=flat-square" alt="menu bar app">
   <img src="https://img.shields.io/badge/SwiftPM-build-brightgreen?style=flat-square&logo=swift&logoColor=white" alt="SwiftPM">
   <img src="https://img.shields.io/badge/permissions-none-success?style=flat-square" alt="no permissions">
+  <a href="https://github.com/TypoStudio/focus-play/releases/latest"><img src="https://img.shields.io/github/v/release/TypoStudio/focus-play?style=flat-square&logo=apple&logoColor=white&label=download&color=7c8cf8" alt="download"></a>
 </p>
 
 # FocusPlay
@@ -34,6 +35,10 @@ A macOS menu bar app that **automatically dims your other monitors when a video 
 - 🌐 **Localized** — Korean, English, Japanese, Chinese (Simplified/Traditional), Spanish, Hindi.
 
 ## Install & Run
+
+### Download (recommended)
+
+Grab `FocusPlay-x.y.z.zip` from the [**latest release**](https://github.com/TypoStudio/focus-play/releases/latest), unzip it, and move `FocusPlay.app` to your **Applications** folder. On first launch, right-click → **Open** (unsigned app).
 
 ### Quick run (development)
 

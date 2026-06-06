@@ -4,3 +4,4 @@
 "menu.dim_strength" = "Dim strength";
 "menu.brighten_when_paused" = "Brighten when playback pauses";
 "menu.quit" = "Quit";
+"menu.launch_at_login" = "Launch at login";

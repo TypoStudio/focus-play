@@ -4,3 +4,4 @@
 "menu.dim_strength" = "어둠 강도";
 "menu.brighten_when_paused" = "재생 멈추면 자동으로 밝게";
 "menu.quit" = "종료";
+"menu.launch_at_login" = "로그인 시 자동 실행";

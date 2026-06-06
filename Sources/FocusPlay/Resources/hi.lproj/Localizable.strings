@@ -4,3 +4,4 @@
 "menu.dim_strength" = "मंदता की तीव्रता";
 "menu.brighten_when_paused" = "प्लेबैक रुकने पर उजला करें";
 "menu.quit" = "बाहर निकलें";
+"menu.launch_at_login" = "लॉगिन पर लॉन्च करें";
