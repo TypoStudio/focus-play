@@ -20,8 +20,8 @@
 
   <rect width="1200" height="560" rx="20" fill="#0a0e1a"/>
 
-  <text x="600" y="64" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', Helvetica, Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff">한 화면에 집중, 나머지는 어둡게</text>
-  <text x="600" y="100" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif" font-size="18" font-weight="500" fill="#8e99c0">전체화면 영상이 재생되는 모니터만 밝게 유지됩니다</text>
+  <text x="600" y="64" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="34" font-weight="800" fill="#ffffff">Focus on one screen, dim the rest</text>
+  <text x="600" y="100" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="18" font-weight="500" fill="#8e99c0">Only the monitor playing fullscreen video stays bright</text>
 
   <!-- Monitor 1 (dimmed) -->
   <g transform="translate(70,170)">
@@ -30,7 +30,7 @@
     <rect x="0" y="0" width="300" height="190" rx="12" fill="#000000" opacity="0.86"/>
     <rect x="120" y="200" width="60" height="20" fill="#161d33"/>
     <rect x="86" y="220" width="128" height="10" rx="5" fill="#161d33"/>
-    <text x="150" y="108" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#5a647f">DIMMED</text>
+    <text x="150" y="108" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#5a647f">DIMMED</text>
   </g>
 
   <!-- Monitor 2 (center, playing — bright) -->
@@ -44,7 +44,7 @@
     <rect x="40" y="168" width="150" height="6" rx="3" fill="#7c8cf8"/>
     <rect x="130" y="220" width="60" height="22" fill="#222a44"/>
     <rect x="92" y="242" width="136" height="11" rx="5.5" fill="#222a44"/>
-    <text x="160" y="44" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#aeb9e6">▶ PLAYING · FULLSCREEN</text>
+    <text x="160" y="44" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#aeb9e6">PLAYING · FULLSCREEN</text>
   </g>
 
   <!-- Monitor 3 (dimmed, with cursor hint) -->
@@ -54,13 +54,13 @@
     <rect x="0" y="0" width="300" height="190" rx="12" fill="#000000" opacity="0.86"/>
     <rect x="120" y="200" width="60" height="20" fill="#161d33"/>
     <rect x="86" y="220" width="128" height="10" rx="5" fill="#161d33"/>
-    <text x="150" y="108" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#5a647f">DIMMED</text>
+    <text x="150" y="108" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#5a647f">DIMMED</text>
   </g>
 
   <!-- caption -->
-  <text x="220" y="408" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#7d88ad">마우스를 올리면 그 화면만 다시 밝아집니다</text>
-  <text x="600" y="408" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#9aa6cf">영상 화면 — 항상 밝게</text>
-  <text x="980" y="408" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="15" fill="#7d88ad">마우스가 없으면 어둡게</text>
+  <text x="220" y="408" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="15" fill="#7d88ad">Hover to brighten that screen again</text>
+  <text x="600" y="408" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="15" fill="#9aa6cf">Video screen — always bright</text>
+  <text x="980" y="408" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="15" fill="#7d88ad">Dimmed when the cursor is away</text>
 
-  <text x="600" y="500" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="14" fill="#5a647f">전체화면을 해제하면 모든 모니터가 원래 밝기로 돌아옵니다</text>
+  <text x="600" y="500" text-anchor="middle" font-family="Sora, -apple-system, Helvetica, Arial, sans-serif" font-size="14" fill="#5a647f">Exit fullscreen and every monitor returns to its original brightness</text>
 </svg>
