@@ -36,7 +36,19 @@ A macOS menu bar app that **automatically dims your other monitors when a video 
 
 ## Install & Run
 
-### Download (recommended)
+### Homebrew
+
+```bash
+brew install --cask typostudio/tap/focusplay
+```
+
+The app is unsigned, so if the first launch is blocked by Gatekeeper, clear the quarantine attribute once.
+
+```bash
+xattr -dr com.apple.quarantine /Applications/FocusPlay.app
+```
+
+### Download
 
 Grab `FocusPlay-x.y.z.zip` from the [**latest release**](https://github.com/TypoStudio/focus-play/releases/latest), unzip it, and move `FocusPlay.app` to your **Applications** folder. On first launch, right-click → **Open** (unsigned app).
 

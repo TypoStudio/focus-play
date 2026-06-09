@@ -36,7 +36,19 @@
 
 ## 설치 및 실행
 
-### 다운로드 (권장)
+### Homebrew
+
+```bash
+brew install --cask typostudio/tap/focusplay
+```
+
+서명되지 않은 앱이라 첫 실행이 Gatekeeper에 막히면 격리 속성을 한 번 제거하세요.
+
+```bash
+xattr -dr com.apple.quarantine /Applications/FocusPlay.app
+```
+
+### 다운로드
 
 [**최신 릴리즈**](https://github.com/TypoStudio/focus-play/releases/latest)에서 `FocusPlay-x.y.z.zip` 을 받아 압축을 풀고, `FocusPlay.app` 을 **응용 프로그램** 폴더로 옮기세요. 첫 실행 시 우클릭 → **열기** (서명되지 않은 앱).
 
