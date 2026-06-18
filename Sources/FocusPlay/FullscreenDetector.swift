@@ -20,14 +20,17 @@ enum FullscreenDetector {
     private static let excludedOwners: Set<String> = ["Dock", "Window Server", "WindowServer", "Wallpaper"]
 
     struct Scan {
-        var fullscreenOwners: [CGDirectDisplayID: String] = [:]   // 전체화면 윈도우의 owner 앱 이름
-        var playing = false                                        // 시스템에 영상 재생 assertion 존재
+        var fullscreenOwners: [CGDirectDisplayID: String] = [:]    // 전체화면 윈도우의 owner 앱 이름
+        var fullscreenBundleIDs: [CGDirectDisplayID: String] = [:] // 전체화면 윈도우의 owner 앱 번들 ID
+        var videoFullscreens: Set<CGDirectDisplayID> = []          // 전체화면 앱 자신이 영상 재생 assertion 보유
+        var playing = false                                         // 시스템에 영상 재생 assertion 존재(전역)
     }
 
     static func scan() -> Scan {
         var scan = Scan()
         let playingPIDs = displaySleepBlockingPIDs()
         scan.playing = !playingPIDs.isEmpty
+        let playingKeys = Set(playingPIDs.compactMap { bundleID(for: $0) })
 
         let options: CGWindowListOption = [.optionOnScreenOnly, .excludeDesktopElements]
         guard let infoList = CGWindowListCopyWindowInfo(options, kCGNullWindowID) as? [[String: Any]] else {
@@ -53,13 +56,39 @@ enum FullscreenDetector {
 
                 if covers(screenFrameTop, with: bounds, topInset: topInset) {
                     scan.fullscreenOwners[displayID] = owner
+                    let ownerPID = (info[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value ?? -1
+                    if let bid = bundleID(for: ownerPID) {
+                        scan.fullscreenBundleIDs[displayID] = bid
+                    }
+                    if ownerHoldsPlaying(pid: ownerPID, playingPIDs: playingPIDs, playingKeys: playingKeys) {
+                        scan.videoFullscreens.insert(displayID)
+                    }
                     break
                 }
             }
         }
 
-        dbg("playing=\(scan.playing) playingPIDs=\(playingPIDs.sorted()) full=\(scan.fullscreenOwners.map { "d\($0.key):\($0.value)" }.sorted())")
+        dbg("playing=\(scan.playing) playingPIDs=\(playingPIDs.sorted()) full=\(scan.fullscreenOwners.map { "d\($0.key):\($0.value)" }.sorted()) videoFS=\(scan.videoFullscreens.sorted())")
         return scan
+    }
+
+    /// 전체화면 윈도우의 소유 앱이 영상 재생 assertion 을 직접(또는 같은 번들 패밀리로) 보유하는가.
+    /// PWA·헬퍼는 윈도우 프로세스와 assertion 프로세스의 PID 가 달라, 번들 ID 의 상·하위 관계로도 본다.
+    private static func ownerHoldsPlaying(pid: pid_t, playingPIDs: Set<pid_t>, playingKeys: Set<String>) -> Bool {
+        guard pid >= 0 else { return false }
+        if playingPIDs.contains(pid) { return true }
+        guard let key = bundleID(for: pid) else { return false }
+        return playingKeys.contains { sameAppFamily(key, $0) }
+    }
+
+    private static func bundleID(for pid: pid_t) -> String? {
+        guard pid >= 0 else { return nil }
+        return NSRunningApplication(processIdentifier: pid)?.bundleIdentifier
+    }
+
+    /// 같은 앱 패밀리(동일 번들이거나 한쪽이 다른 쪽의 하위 번들, 예: com.google.Chrome ↔ com.google.Chrome.app.xxx).
+    private static func sameAppFamily(_ a: String, _ b: String) -> Bool {
+        a == b || a.hasPrefix(b + ".") || b.hasPrefix(a + ".")
     }
 
     /// 디스플레이가 꺼지지 않게 막는 assertion(= 영상 재생 신호)을 가진 프로세스 PID 집합.

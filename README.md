@@ -50,7 +50,7 @@ xattr -dr com.apple.quarantine /Applications/FocusPlay.app
 
 ### Download
 
-Grab `FocusPlay-x.y.z.zip` from the [**latest release**](https://github.com/TypoStudio/focus-play/releases/latest), unzip it, and move `FocusPlay.app` to your **Applications** folder. On first launch, right-click → **Open** (unsigned app).
+Grab `FocusPlay-x.y.z.dmg` from the [**latest release**](https://github.com/TypoStudio/focus-play/releases/latest), open it, and drag `FocusPlay.app` into the **Applications** folder. On first launch, right-click → **Open** (unsigned app).
 
 ### Quick run (development)
 
@@ -165,7 +165,7 @@ xattr -dr com.apple.quarantine /Applications/FocusPlay.app
 
 ### 다운로드
 
-[**최신 릴리즈**](https://github.com/TypoStudio/focus-play/releases/latest)에서 `FocusPlay-x.y.z.zip` 을 받아 압축을 풀고, `FocusPlay.app` 을 **응용 프로그램** 폴더로 옮기세요. 첫 실행 시 우클릭 → **열기** (서명되지 않은 앱).
+[**최신 릴리즈**](https://github.com/TypoStudio/focus-play/releases/latest)에서 `FocusPlay-x.y.z.dmg` 를 받아 열고, `FocusPlay.app` 을 **응용 프로그램** 폴더로 끌어다 놓으세요. 첫 실행 시 우클릭 → **열기** (서명되지 않은 앱).
 
 ### 빠른 실행 (개발)
 

@@ -32,12 +32,23 @@ final class DimController {
         "Infuse", "Elmedia Player", "PotPlayer", "MPV"
     ]
 
-    // full(디스플레이별)·playing(전역) 신호가 깜빡이고 서로 시간이 어긋나므로 각각 디바운스한다.
+    // 브라우저·웹앱(PWA 포함). 전체화면 앱이 이 패밀리이고 시스템에 재생 신호가 있을 때만 영상으로 본다.
+    // PWA 번들 ID(com.google.Chrome.app.xxx)는 브라우저 번들 ID 를 접두로 가져 prefix 로 함께 잡힌다.
+    private let videoBrowserPrefixes: [String] = [
+        "com.google.Chrome", "org.chromium.Chromium", "com.apple.Safari",
+        "com.microsoft.edgemac", "com.brave.Browser", "org.mozilla.firefox",
+        "company.thebrowser.Browser", "com.operasoftware.Opera",
+        "com.vivaldi.Vivaldi", "com.naver.Whale"
+    ]
+
+    // full(디스플레이별)·playing(전역)·videoFullscreen(디스플레이별) 신호가 깜빡이므로 각각 디바운스한다.
     private var fullMiss: [CGDirectDisplayID: Int] = [:]
     private var lastOwner: [CGDirectDisplayID: String] = [:]
+    private var lastBundleID: [CGDirectDisplayID: String] = [:]
     // "영상 전체화면"이 한 번 확인된 디스플레이(전체화면이 유지되는 한 sticky).
     private var videoConfirmed: [CGDirectDisplayID: Bool] = [:]
     private var playingMiss = 0
+    private var videoMiss: [CGDirectDisplayID: Int] = [:]
     private let signalThreshold = 8         // 0.12s × 8 ≈ 1초 연속 false 여야 신호 해제
 
     // 자동 모드에서 전체화면이 감지되어야만 동작. 수동 모드에서는 이 플래그로 on/off.
@@ -95,7 +106,7 @@ final class DimController {
         if mode == .auto {
             let scan = FullscreenDetector.scan()
 
-            // 영상 재생(전역) 신호 디바운스: 최근 signalThreshold 틱 내 한 번이라도 있으면 유효.
+            // 시스템 영상 재생(전역) 신호 디바운스: 브라우저 전체화면 판정에만 사용.
             playingMiss = scan.playing ? 0 : playingMiss + 1
             let playingRecent = playingMiss < signalThreshold
 
@@ -103,22 +114,33 @@ final class DimController {
             for screen in NSScreen.screens {
                 guard let id = screen.displayID else { continue }
 
-                // 전체화면(디스플레이별) 신호 디바운스 + owner 기억.
+                // 전체화면(디스플레이별) 신호 디바운스 + owner/번들 기억.
                 if let owner = scan.fullscreenOwners[id] {
                     fullMiss[id] = 0
                     lastOwner[id] = owner
+                    lastBundleID[id] = scan.fullscreenBundleIDs[id]
                 } else {
                     fullMiss[id] = (fullMiss[id] ?? signalThreshold) + 1
                 }
                 let fullRecent = (fullMiss[id] ?? signalThreshold) < signalThreshold
                 if !fullRecent {
                     lastOwner[id] = nil
+                    lastBundleID[id] = nil
                     videoConfirmed[id] = false
                 }
 
-                // 영상 신호 = 영상 플레이어 앱이거나 OR 시스템에 영상 재생 중.
+                // 전체화면 앱 자신이 재생 assertion 을 가진 디스플레이(정밀 신호) 디바운스.
+                videoMiss[id] = scan.videoFullscreens.contains(id) ? 0 : (videoMiss[id] ?? signalThreshold) + 1
+                let ownerPlayingRecent = (videoMiss[id] ?? signalThreshold) < signalThreshold
+
+                // 영상 = (네이티브 플레이어 앱) OR (전체화면 앱이 직접 재생 신호 보유)
+                //        OR (전체화면 앱이 브라우저·웹앱이고 시스템에 재생 신호가 있음).
+                // 영상이 다른 창에서 재생 중이어도 전체화면 앱이 그 영상 소스가 아니면 어둡게 하지 않는다.
                 let isVideoPlayer = lastOwner[id].map { videoPlayers.contains($0) } ?? false
-                let isVideo = isVideoPlayer || playingRecent
+                let isBrowser = lastBundleID[id].map { bid in
+                    videoBrowserPrefixes.contains { bid == $0 || bid.hasPrefix($0 + ".") }
+                } ?? false
+                let isVideo = isVideoPlayer || ownerPlayingRecent || (isBrowser && playingRecent)
                 if fullRecent && isVideo { videoConfirmed[id] = true }
 
                 // 기본: 한 번 확인되면 전체화면 유지되는 한 어둡게(재생 멈춰도).

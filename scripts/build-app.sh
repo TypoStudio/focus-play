@@ -4,7 +4,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 APP="build/FocusPlay.app"
-VERSION="${1:-1.0.1}"
+VERSION="${1:-1.0.2}"
+DMG="build/FocusPlay-${VERSION}.dmg"
 
 echo "▶ release 빌드..."
 swift build -c release
@@ -71,4 +72,13 @@ PLIST
 echo "▶ ad-hoc 서명..."
 codesign --force --sign - "$APP"
 
+echo "▶ DMG 생성: $DMG"
+STAGE="$(mktemp -d)/FocusPlay"
+mkdir -p "$STAGE"
+cp -R "$APP" "$STAGE/"
+ln -s /Applications "$STAGE/Applications"
+rm -f "$DMG"
+hdiutil create -volname "FocusPlay" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
+
 echo "✅ 완료: $APP"
+echo "✅ 완료: $DMG"
