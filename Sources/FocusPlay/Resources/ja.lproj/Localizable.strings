@@ -1,7 +1,11 @@
-"menu.auto" = "自動（フルスクリーン検出）";
-"menu.manual" = "手動切り替え";
-"menu.off" = "オフ";
+"menu.enabled" = "有効";
+"menu.manual" = "手動で暗くする";
 "menu.dim_strength" = "暗さの強さ";
 "menu.brighten_when_paused" = "再生停止時に明るくする";
-"menu.quit" = "終了";
 "menu.launch_at_login" = "ログイン時に起動";
+"menu.settings" = "設定…";
+"menu.quit" = "終了";
+"settings.manual_hotkey" = "手動で暗くするショートカット";
+"settings.recording" = "キーを入力…";
+"settings.tab_general" = "一般";
+"settings.tab_about" = "情報";

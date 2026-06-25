@@ -1,7 +1,11 @@
-"menu.auto" = "Automático (detectar pantalla completa)";
-"menu.manual" = "Alternar manualmente";
-"menu.off" = "Desactivar";
+"menu.enabled" = "Activado";
+"menu.manual" = "Atenuar manualmente";
 "menu.dim_strength" = "Intensidad de atenuación";
 "menu.brighten_when_paused" = "Aclarar al pausar la reproducción";
-"menu.quit" = "Salir";
 "menu.launch_at_login" = "Iniciar al iniciar sesión";
+"menu.settings" = "Ajustes…";
+"menu.quit" = "Salir";
+"settings.manual_hotkey" = "Atajo de atenuación manual";
+"settings.recording" = "Pulsa atajo…";
+"settings.tab_general" = "General";
+"settings.tab_about" = "Acerca de";

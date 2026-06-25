@@ -4,8 +4,14 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 APP="build/FocusPlay.app"
-VERSION="${1:-1.0.2}"
+VERSION="${1:-1.0.3}"
 DMG="build/FocusPlay-${VERSION}.dmg"
+
+# 빌드 번호: 빌드할 때마다 단조 증가(CFBundleVersion). 마케팅 버전(CFBundleShortVersionString)과 별개.
+BUILD_FILE="scripts/.build-number"
+BUILD=$(( $(cat "$BUILD_FILE" 2>/dev/null || echo 0) + 1 ))
+echo "$BUILD" > "$BUILD_FILE"
+echo "▶ 빌드 번호: $BUILD (버전 $VERSION)"
 
 echo "▶ release 빌드..."
 swift build -c release
@@ -61,7 +67,7 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
     <key>CFBundleShortVersionString</key><string>${VERSION}</string>
-    <key>CFBundleVersion</key><string>${VERSION}</string>
+    <key>CFBundleVersion</key><string>${BUILD}</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHumanReadableCopyright</key><string>© 2026 TypoStudio</string>

@@ -1,7 +1,11 @@
-"menu.auto" = "자동 (전체화면 감지)";
-"menu.manual" = "수동 토글";
-"menu.off" = "끄기";
+"menu.enabled" = "활성화";
+"menu.manual" = "수동 어둡게";
 "menu.dim_strength" = "어둠 강도";
 "menu.brighten_when_paused" = "재생 멈추면 자동으로 밝게";
-"menu.quit" = "종료";
 "menu.launch_at_login" = "로그인 시 자동 실행";
+"menu.settings" = "설정…";
+"menu.quit" = "종료";
+"settings.manual_hotkey" = "수동 어둡게 단축키";
+"settings.recording" = "키 입력…";
+"settings.tab_general" = "일반";
+"settings.tab_about" = "정보";

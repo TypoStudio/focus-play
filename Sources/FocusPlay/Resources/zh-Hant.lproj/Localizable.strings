@@ -1,7 +1,11 @@
-"menu.auto" = "自動（偵測全螢幕）";
-"menu.manual" = "手動切換";
-"menu.off" = "關閉";
+"menu.enabled" = "啟用";
+"menu.manual" = "手動變暗";
 "menu.dim_strength" = "變暗強度";
 "menu.brighten_when_paused" = "暫停播放時變亮";
-"menu.quit" = "結束";
 "menu.launch_at_login" = "登入時啟動";
+"menu.settings" = "設定…";
+"menu.quit" = "結束";
+"settings.manual_hotkey" = "手動變暗快捷鍵";
+"settings.recording" = "請按快捷鍵…";
+"settings.tab_general" = "一般";
+"settings.tab_about" = "關於";

@@ -1,21 +1,29 @@
 import AppKit
+import Combine
 
 @MainActor
-final class DimController {
+final class DimController: ObservableObject {
 
     enum Mode {
-        case auto      // 외부 앱 전체화면 감지 시 자동으로 나머지 모니터를 어둡게
-        case manual    // 사용자가 토글한 동안 마우스 없는 모니터를 어둡게
+        case auto      // 외부 앱 전체화면 영상 감지 시 자동으로 나머지 모니터를 어둡게
         case off       // 비활성
     }
 
     private static let pauseKey = "brightenWhenPaused"
+    private static let dimKey = "dimStrength"
 
     private(set) var mode: Mode = .auto
-    var dimStrength: CGFloat = 0.98          // 0~1, 어둠 강도 (기본 98%)
+
+    // 0~1, 어둠 강도 (기본 98%). 설정창 슬라이더와 바인딩.
+    @Published var dimStrength: CGFloat = (UserDefaults.standard.object(forKey: DimController.dimKey) as? Double).map { CGFloat($0) } ?? 0.98 {
+        didSet {
+            UserDefaults.standard.set(Double(dimStrength), forKey: Self.dimKey)
+            update()
+        }
+    }
 
     // 재생을 멈추면 자동으로 밝게 할지. 기본은 false(전체화면 유지되는 동안 계속 어둡게).
-    var brightenWhenPaused: Bool = UserDefaults.standard.bool(forKey: DimController.pauseKey) {
+    @Published var brightenWhenPaused: Bool = UserDefaults.standard.bool(forKey: DimController.pauseKey) {
         didSet {
             UserDefaults.standard.set(brightenWhenPaused, forKey: Self.pauseKey)
             update()
@@ -32,34 +40,23 @@ final class DimController {
         "Infuse", "Elmedia Player", "PotPlayer", "MPV"
     ]
 
-    // 브라우저·웹앱(PWA 포함). 전체화면 앱이 이 패밀리이고 시스템에 재생 신호가 있을 때만 영상으로 본다.
-    // PWA 번들 ID(com.google.Chrome.app.xxx)는 브라우저 번들 ID 를 접두로 가져 prefix 로 함께 잡힌다.
-    private let videoBrowserPrefixes: [String] = [
-        "com.google.Chrome", "org.chromium.Chromium", "com.apple.Safari",
-        "com.microsoft.edgemac", "com.brave.Browser", "org.mozilla.firefox",
-        "company.thebrowser.Browser", "com.operasoftware.Opera",
-        "com.vivaldi.Vivaldi", "com.naver.Whale"
-    ]
-
-    // full(디스플레이별)·playing(전역)·videoFullscreen(디스플레이별) 신호가 깜빡이므로 각각 디바운스한다.
+    // full(디스플레이별)·videoFullscreenDirect(디스플레이별) 신호가 깜빡이므로 각각 디바운스한다.
     private var fullMiss: [CGDirectDisplayID: Int] = [:]
     private var lastOwner: [CGDirectDisplayID: String] = [:]
-    private var lastBundleID: [CGDirectDisplayID: String] = [:]
     // "영상 전체화면"이 한 번 확인된 디스플레이(전체화면이 유지되는 한 sticky).
     private var videoConfirmed: [CGDirectDisplayID: Bool] = [:]
-    private var playingMiss = 0
-    private var videoMiss: [CGDirectDisplayID: Int] = [:]
+    private var videoMissDirect: [CGDirectDisplayID: Int] = [:]
     private let signalThreshold = 8         // 0.12s × 8 ≈ 1초 연속 false 여야 신호 해제
 
-    // 자동 모드에서 전체화면이 감지되어야만 동작. 수동 모드에서는 이 플래그로 on/off.
-    private var manualActive = false
+    // 수동 어둡게: 자동 감지가 안 잡히는 앱(크롬앱 PWA 영상 등)에서 ⌘D 로 직접 켠다.
+    // 자동 감지(lastFullscreenDisplays)와 독립적으로 동작하며, 켜지면 마우스 있는 화면만 밝게 둔다.
+    private(set) var manualActive = false
 
     /// 현재 집중 모드가 화면을 어둡게 만들 수 있는 상태인지(메뉴 체크표시용).
     var isEngaged: Bool {
         switch mode {
-        case .auto:   return !lastFullscreenDisplays.isEmpty
-        case .manual: return manualActive
-        case .off:    return false
+        case .auto: return !lastFullscreenDisplays.isEmpty || manualActive
+        case .off:  return false
         }
     }
 
@@ -89,14 +86,9 @@ final class DimController {
         update()
     }
 
-    func toggleManual() {
-        mode = .manual
+    /// 수동 어둡게 토글(⌘D). 모드를 바꾸지 않으므로 자동 모드 위에서도 동작한다.
+    func toggleManualDim() {
         manualActive.toggle()
-        update()
-    }
-
-    func setDimStrength(_ value: CGFloat) {
-        dimStrength = max(0, min(1, value))
         update()
     }
 
@@ -106,41 +98,32 @@ final class DimController {
         if mode == .auto {
             let scan = FullscreenDetector.scan()
 
-            // 시스템 영상 재생(전역) 신호 디바운스: 브라우저 전체화면 판정에만 사용.
-            playingMiss = scan.playing ? 0 : playingMiss + 1
-            let playingRecent = playingMiss < signalThreshold
-
             var newSet = Set<CGDirectDisplayID>()
             for screen in NSScreen.screens {
                 guard let id = screen.displayID else { continue }
 
-                // 전체화면(디스플레이별) 신호 디바운스 + owner/번들 기억.
+                // 전체화면(디스플레이별) 신호 디바운스 + owner 기억.
                 if let owner = scan.fullscreenOwners[id] {
                     fullMiss[id] = 0
                     lastOwner[id] = owner
-                    lastBundleID[id] = scan.fullscreenBundleIDs[id]
                 } else {
                     fullMiss[id] = (fullMiss[id] ?? signalThreshold) + 1
                 }
                 let fullRecent = (fullMiss[id] ?? signalThreshold) < signalThreshold
                 if !fullRecent {
                     lastOwner[id] = nil
-                    lastBundleID[id] = nil
                     videoConfirmed[id] = false
                 }
 
-                // 전체화면 앱 자신이 재생 assertion 을 가진 디스플레이(정밀 신호) 디바운스.
-                videoMiss[id] = scan.videoFullscreens.contains(id) ? 0 : (videoMiss[id] ?? signalThreshold) + 1
-                let ownerPlayingRecent = (videoMiss[id] ?? signalThreshold) < signalThreshold
+                // 전체화면 윈도우 owner 가 직접 재생 신호를 가진 디스플레이(엄격 신호) 디바운스.
+                videoMissDirect[id] = scan.videoFullscreensDirect.contains(id) ? 0 : (videoMissDirect[id] ?? signalThreshold) + 1
+                let ownerDirectRecent = (videoMissDirect[id] ?? signalThreshold) < signalThreshold
 
-                // 영상 = (네이티브 플레이어 앱) OR (전체화면 앱이 직접 재생 신호 보유)
-                //        OR (전체화면 앱이 브라우저·웹앱이고 시스템에 재생 신호가 있음).
-                // 영상이 다른 창에서 재생 중이어도 전체화면 앱이 그 영상 소스가 아니면 어둡게 하지 않는다.
+                // 영상 = (네이티브 플레이어 앱) OR (전체화면 윈도우 자신이 영상 소스 = 직접 재생 신호 보유).
+                // 다른 창·다른 모니터에서 영상이 재생 중이어도 전체화면 윈도우가 그 소스가 아니면 어둡게 하지 않는다.
+                // PWA(크롬앱)는 윈도우 PID 와 재생 PID 가 갈려 자동 감지되지 않으므로 수동(⌘D)으로 처리한다.
                 let isVideoPlayer = lastOwner[id].map { videoPlayers.contains($0) } ?? false
-                let isBrowser = lastBundleID[id].map { bid in
-                    videoBrowserPrefixes.contains { bid == $0 || bid.hasPrefix($0 + ".") }
-                } ?? false
-                let isVideo = isVideoPlayer || ownerPlayingRecent || (isBrowser && playingRecent)
+                let isVideo = isVideoPlayer || ownerDirectRecent
                 if fullRecent && isVideo { videoConfirmed[id] = true }
 
                 // 기본: 한 번 확인되면 전체화면 유지되는 한 어둡게(재생 멈춰도).

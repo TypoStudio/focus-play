@@ -1,7 +1,11 @@
-"menu.auto" = "स्वचालित (फ़ुलस्क्रीन पहचान)";
-"menu.manual" = "मैनुअल टॉगल";
-"menu.off" = "बंद";
+"menu.enabled" = "सक्षम";
+"menu.manual" = "मैनुअल मंदन";
 "menu.dim_strength" = "मंदता की तीव्रता";
 "menu.brighten_when_paused" = "प्लेबैक रुकने पर उजला करें";
-"menu.quit" = "बाहर निकलें";
 "menu.launch_at_login" = "लॉगिन पर लॉन्च करें";
+"menu.settings" = "सेटिंग्स…";
+"menu.quit" = "बाहर निकलें";
+"settings.manual_hotkey" = "मैनुअल मंदन शॉर्टकट";
+"settings.recording" = "शॉर्टकट दबाएँ…";
+"settings.tab_general" = "सामान्य";
+"settings.tab_about" = "परिचय";
